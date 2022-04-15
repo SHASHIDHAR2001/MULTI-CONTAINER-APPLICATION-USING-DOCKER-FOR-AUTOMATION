@@ -1,12 +1,14 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
 before_install:
-  - docker build -t shashidhar/multi-docker -f ./client/Dockerfile.dev ./client
+  - docker build -t shashidhar/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run shashidhar/multi-docker npm test -- --coverage
+  - docker run -e CI=true shashidhar/react-test npm test
 
 after_success:
   - docker build -t shashidhar/multi-client ./client
@@ -20,16 +22,3 @@ after_success:
   - docker push shashidhar/multi-nginx
   - docker push shashidhar/multi-server
   - docker push shashidhar/multi-worker
-
-deploy:
-  provider: elasticbeanstalk
-  region: us-east-2
-  app: multi-docker
-  env: MultiDocker-env
-  bucket_name: elasticbeanstalk-us-east-2-141043694641
-  bucket_path: docker-multi
-  on:
-    branch: master
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key:
-    secure: $AWS_SECRET_KEY
