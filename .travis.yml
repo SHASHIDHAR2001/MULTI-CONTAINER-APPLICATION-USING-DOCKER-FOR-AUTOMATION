@@ -3,23 +3,23 @@ services:
   - docker
 
 before_install:
-  - docker build -t sambhaba/complexreactapp -f ./client/Dockerfile.dev ./client
+  - docker build -t shashidhar/multi-docker -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run sambhaba/complexreactapp npm test -- --coverage
+  - docker run shashidhar/multi-docker npm test -- --coverage
 
 after_success:
-  - docker build -t sambhaba/multi-client ./client
-  - docker build -t sambhaba/multi-nginx ./nginx
-  - docker build -t sambhaba/multi-server ./server
-  - docker build -t sambhaba/multi-worker ./worker
+  - docker build -t shashidhar/multi-client ./client
+  - docker build -t shashidhar/multi-nginx ./nginx
+  - docker build -t shashidhar/multi-server ./server
+  - docker build -t shashidhar/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push sambhaba/multi-client
-  - docker push sambhaba/multi-nginx
-  - docker push sambhaba/multi-server
-  - docker push sambhaba/multi-worker
+  - docker push shashidhar/multi-client
+  - docker push shashidhar/multi-nginx
+  - docker push shashidhar/multi-server
+  - docker push shashidhar/multi-worker
 
 deploy:
   provider: elasticbeanstalk
