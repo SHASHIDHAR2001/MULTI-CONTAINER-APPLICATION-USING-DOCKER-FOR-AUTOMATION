@@ -5,20 +5,32 @@ services:
   - docker
 
 before_install:
-  - docker build -t shashidhar/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true shashidhar/react-test npm test
+  - docker run -e CI=true stephengrider/react-test npm test
 
 after_success:
-  - docker build -t shashidhar21/multi-client ./client
-  - docker build -t shashidhar21/multi-nginx ./nginx
-  - docker build -t shashidhar21/multi-server ./server
-  - docker build -t shashidhar21/multi-worker ./worker
+  - docker build -t stephengrider/multi-client ./client
+  - docker build -t stephengrider/multi-nginx ./nginx
+  - docker build -t stephengrider/multi-server ./server
+  - docker build -t stephengrider/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push shashidhar21/multi-client
-  - docker push shashidhar21/multi-nginx
-  - docker push shashidhar21/multi-server
-  - docker push shashidhar21/multi-worker
+  - docker push stephengrider/multi-client
+  - docker push stephengrider/multi-nginx
+  - docker push stephengrider/multi-server
+  - docker push stephengrider/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'Multidocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-781720328434'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
