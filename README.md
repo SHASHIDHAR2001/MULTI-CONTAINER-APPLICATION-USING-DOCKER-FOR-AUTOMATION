@@ -29,5 +29,5 @@ By using tools like Docker Compose, Travis-CI, and AWS, I have made it easy to m
 while ensuring that it is reliable, scalable, and secure.
 
 ###SKILLS
-Docker, React.js, Git, Github, Travis-ci, AWS
+Docker, React.js, Git, Github, Travis-ci, AWS, CI/CD
 
